@@ -68,3 +68,19 @@ CREATE TABLE IF NOT EXISTS hotel_aspect_monthly (
   negative_count INTEGER NOT NULL,
   PRIMARY KEY (hotel_id, aspect, month)
 );
+
+
+-- Trend detector: one row per detected problem.
+CREATE TABLE IF NOT EXISTS alerts (
+  id             SERIAL PRIMARY KEY,
+  hotel_id       INTEGER NOT NULL REFERENCES hotels (id),
+  aspect         TEXT NOT NULL,
+  alert_type     TEXT NOT NULL,
+  month          DATE NOT NULL,
+  baseline_value DOUBLE PRECISION NOT NULL,
+  current_value  DOUBLE PRECISION NOT NULL,
+  mentions       INTEGER NOT NULL,
+  status         TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'acknowledged', 'resolved')),
+  detected_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (hotel_id, aspect, alert_type, month)
+);
