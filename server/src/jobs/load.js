@@ -2,11 +2,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { parse } = require('csv-parse');
 const { Client } = require('pg');
-const { cleanRow } = require('./clean');
+const { cleanRow } = require('../lib/clean');
 
 const DATABASE_URL = process.env.DATABASE_URL ?? 'postgres://app:app@localhost:5432/reviews';
-const SCHEMA_PATH = path.join(__dirname, '..', 'schema.sql');
-const USAGE = 'Usage: node src/load.js <csvPath> [--limit N]';
+const SCHEMA_PATH = path.join(__dirname, '..', '..', 'db', 'schema.sql');
+const USAGE = 'Usage: npm run load -- <csvPath> [--limit N]';
 
 // 8 columns x 1000 rows stays well under Postgres's limit of 65,535 values per query.
 const BATCH_SIZE = 1000;

@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { validateMentions } = require('../src/llm');
+const { validateMentions } = require('../src/jobs/llm');
 
 test('validateMentions turns polarity words into +1 and -1', () => {
   const entries = [{

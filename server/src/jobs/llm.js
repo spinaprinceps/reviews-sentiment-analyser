@@ -1,5 +1,5 @@
 const { Client } = require('pg');
-const { ASPECTS } = require('./aspects');
+const { ASPECTS } = require('../lib/aspects');
 
 const DATABASE_URL = process.env.DATABASE_URL ?? 'postgres://app:app@localhost:5432/reviews';
 const API_KEY = process.env.GEMINI_API_KEY;
@@ -9,7 +9,7 @@ const BATCH_SIZE = 20;
 const DEFAULT_LIMIT = 200;
 const MAX_ATTEMPTS = 5;
 const ASPECT_NAMES = Object.keys(ASPECTS);
-const USAGE = 'Usage: node --env-file=.env src/llm.js [--limit N]';
+const USAGE = 'Usage: npm run llm -- [--limit N]';
 
 const INSTRUCTIONS = `You label hotel reviews by aspect.
 Each review has a "liked" and a "disliked" part written by the guest.

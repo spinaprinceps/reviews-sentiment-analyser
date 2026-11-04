@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { extractMentions, findAspects, flagReason } = require('../src/aspects');
+const { extractMentions, findAspects, flagReason } = require('../src/lib/aspects');
 
 
 const aspectsOf = (mentions) => mentions.map((m) => m.aspect).sort();

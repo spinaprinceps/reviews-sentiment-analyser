@@ -8,7 +8,7 @@ const {
   parseDate,
   parseNumber,
   parseTags,
-} = require('../src/clean');
+} = require('../src/lib/clean');
 
 function rawRow(overrides = {}) {
   return {

@@ -1,5 +1,5 @@
 const { Client } = require('pg');
-const { extractMentions, flagReason } = require('./aspects');
+const { extractMentions, flagReason } = require('../lib/aspects');
 
 const DATABASE_URL = process.env.DATABASE_URL ?? 'postgres://app:app@localhost:5432/reviews';
 const BATCH_SIZE = 500;
