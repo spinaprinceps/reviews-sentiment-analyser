@@ -28,3 +28,31 @@ npm run trends               # rebuild monthly counts and detect alerts
 
 - `npm test` runs the unit tests.
 - `npm run dev` starts the API on http://localhost:3001 and restarts it when files change.
+
+## API
+
+| Endpoint | Returns |
+|---|---|
+| `GET /api/health` | Whether the API is up |
+| `GET /api/meta` | Cities (with hotel counts) and the aspect names, for dropdowns |
+| `GET /api/hotels?city=&q=` | Up to 50 hotels, most open alerts first |
+| `GET /api/hotels/:id/aspects` | Good and bad mentions per aspect, next to the city average |
+| `GET /api/hotels/:id/trends?aspect=` | One aspect month by month |
+| `GET /api/hotels/:id/alerts` | Alerts, newest first, with example complaints |
+| `GET /api/recommendations?city=&priorities=` | The 10 best hotels in a city for 1 to 3 aspects |
+
+Recommendations use the last 12 months of data. Each hotel's % positive is smoothed towards the city average with 20 imaginary mentions, so a hotel with a handful of glowing reviews can't top the list. Each result includes recent positive guest quotes and how many alerts it had on those aspects in the last 6 months.
+
+## Run the website
+
+With the API running, from `client/`:
+
+```sh
+npm install
+npm run dev
+```
+
+Open http://localhost:5173. It has two views:
+
+- **Find a hotel:** a traveller picks a city and up to 3 priorities and gets a ranked list with reasons and guest quotes.
+- **Hotel insights:** pick a hotel to see its aspect scores, monthly trend and alerts.

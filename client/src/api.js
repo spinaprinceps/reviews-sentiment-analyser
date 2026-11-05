@@ -20,3 +20,10 @@ export const getTrend = (hotelId, aspect) =>
   get(`/api/hotels/${hotelId}/trends?aspect=${encodeURIComponent(aspect)}`);
 
 export const getAlerts = (hotelId) => get(`/api/hotels/${hotelId}/alerts`);
+
+export const getMeta = () => get('/api/meta');
+
+export function getRecommendations(city, priorities) {
+  const params = new URLSearchParams({ city, priorities: priorities.join(',') });
+  return get(`/api/recommendations?${params}`);
+}

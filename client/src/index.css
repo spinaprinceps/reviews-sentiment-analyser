@@ -72,11 +72,118 @@ button.link {
 }
 button.link:hover { text-decoration: underline; }
 
+/* Top bar: switch between the traveller and hotel views. */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.topbar button {
+  background: none;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font: inherit;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.topbar button:hover { background: var(--page); }
+.topbar button.selected { background: var(--selected); color: var(--text); font-weight: 500; }
+
+/* Traveller page: search form, then ranked hotels. */
+.traveller { max-width: 960px; margin: 0 auto; }
+.finder { display: grid; gap: 16px; margin: 16px 0; }
+.field { display: grid; gap: 6px; border: none; margin: 0; padding: 0; min-width: 0; }
+.field-label { font-weight: 500; padding: 0; }
+.field select {
+  max-width: 360px;
+  padding: 8px;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.chip:hover:not(:disabled) { background: var(--page); }
+.chip.selected { background: var(--selected); border-color: var(--series-1); font-weight: 500; }
+.chip:disabled { opacity: 0.4; cursor: not-allowed; }
+.hint { margin: 12px 0; }
+
+.results { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.result-head { display: flex; align-items: flex-start; gap: 12px; }
+.rank {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--selected);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.result-title { flex: 1; min-width: 0; }
+.result-title h2 { margin-bottom: 2px; }
+.result-score { display: grid; justify-items: end; }
+.result-score strong { font-size: 22px; font-variant-numeric: tabular-nums; }
+.result-aspects {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.result-aspects li {
+  display: grid;
+  grid-template-columns: 110px minmax(60px, 1fr) 200px;
+  align-items: center;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.result-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.warning { color: var(--critical); }
+.quotes {
+  grid-column: 1 / -1;
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 2px 0 2px 12px;
+  border-left: 2px solid var(--series-1-track);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-style: italic;
+}
+.quotes li + li { margin-top: 2px; }
+
 /* Page layout: hotel list on the left, dashboard on the right. */
 .layout {
   display: grid;
   grid-template-columns: 320px 1fr;
-  min-height: 100vh;
+  min-height: calc(100vh - 48px);
 }
 
 main { padding: 24px; min-width: 0; }
@@ -90,9 +197,9 @@ main { padding: 24px; min-width: 0; }
   display: flex;
   flex-direction: column;
   gap: 8px;
-  height: 100vh;
+  height: calc(100vh - 48px);
   position: sticky;
-  top: 0;
+  top: 48px;
 }
 
 .picker select,
@@ -327,4 +434,6 @@ main { padding: 24px; min-width: 0; }
   main { padding: 16px; }
   .score-row { grid-template-columns: 80px 1fr 48px; }
   .delta { grid-column: 1 / -1; }
+  .result-aspects li { grid-template-columns: 90px 1fr; }
+  .result-aspects li .small { grid-column: 1 / -1; }
 }

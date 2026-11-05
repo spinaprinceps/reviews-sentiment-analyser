@@ -8,6 +8,8 @@ const ALERT_MONTHS = 6;
 // hotel with 3 glowing mentions can't outrank one with 95 good out of 100.
 const PRIOR_MENTIONS = 20;
 const LIMIT = 10;
+// Guest quotes shown per hotel and priority.
+const QUOTES_PER_ASPECT = 2;
 
 // The best hotels in a city for the given aspects, best first.
 async function recommendHotels(city, priorities) {
@@ -56,6 +58,44 @@ async function recommendHotels(city, priorities) {
      ORDER BY score DESC, h.name
      LIMIT $6::int`,
     [city, priorities, RECENT_MONTHS, PRIOR_MENTIONS, ALERT_MONTHS, LIMIT]
+  );
+  const hotels = result.rows;
+  if (hotels.length === 0) return hotels;
+
+  // Attach each priority's quotes to the matching entry in the hotel's aspects list.
+  const quotes = await positiveQuotes(hotels.map((h) => h.id), priorities);
+  for (const hotel of hotels) {
+    for (const entry of hotel.aspects) {
+      entry.quotes = quotes
+        .filter((q) => q.hotel_id === hotel.id && q.aspect === entry.aspect)
+        .map((q) => q.sentence);
+    }
+  }
+  return hotels;
+}
+
+// The newest praise for each hotel and aspect, at most QUOTES_PER_ASPECT each.
+// Snippets with "but", "however"... are skipped: they often praise one thing and
+// then complain, which would be misleading shown as a compliment.
+async function positiveQuotes(hotelIds, aspects) {
+  const result = await pool.query(
+    `SELECT hotel_id, aspect, sentence
+     FROM (
+       SELECT hotel_id, aspect, sentence,
+              row_number() OVER (
+                PARTITION BY hotel_id, aspect
+                ORDER BY review_date DESC, id DESC
+              ) AS n
+       FROM aspect_mentions
+       WHERE hotel_id = ANY($1::int[])
+         AND aspect = ANY($2::text[])
+         AND polarity = 1
+         AND length(sentence) >= 25
+         AND sentence !~* '\\m(but|however|although|though|except|unfortunately)\\M'
+     ) ranked
+     WHERE n <= $3::int
+     ORDER BY hotel_id, aspect, n`,
+    [hotelIds, aspects, QUOTES_PER_ASPECT]
   );
   return result.rows;
 }

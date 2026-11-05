@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { listHotels } from '../api';
-
-const CITIES = ['Amsterdam', 'Barcelona', 'London', 'Milan', 'Paris', 'Vienna'];
+import { getMeta, listHotels } from '../api';
+import { useApi } from '../hooks/useApi';
 
 export default function HotelPicker({ selectedId, onSelect }) {
+  // The city list comes from the database, so a newly loaded city appears without a code change.
+  const meta = useApi(getMeta, []);
   const [city, setCity] = useState('');
   const [query, setQuery] = useState('');
   const [hotels, setHotels] = useState([]);
@@ -42,8 +43,8 @@ export default function HotelPicker({ selectedId, onSelect }) {
 
       <select value={city} onChange={(e) => setCity(e.target.value)} aria-label="City">
         <option value="">All cities</option>
-        {CITIES.map((c) => (
-          <option key={c} value={c}>{c}</option>
+        {meta.data?.cities.map((c) => (
+          <option key={c.city} value={c.city}>{c.city}</option>
         ))}
       </select>
 
