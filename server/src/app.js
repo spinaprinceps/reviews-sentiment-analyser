@@ -3,6 +3,8 @@ const cors = require('cors');
 const healthRoutes = require('./routes/health.routes');
 const hotelsRoutes = require('./routes/hotels.routes');
 const errorHandler = require('./middleware/errorHandler');
+const metaRoutes = require('./routes/meta.routes');
+const recommendationsRoutes = require('./routes/recommendations.routes');
 
 const app = express();
 
@@ -12,6 +14,9 @@ app.use(express.json());
 
 app.use('/api/health', healthRoutes);
 app.use('/api/hotels', hotelsRoutes);
+app.use('/api/meta', metaRoutes);
+app.use('/api/recommendations', recommendationsRoutes);
+
 
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));
 app.use(errorHandler);
