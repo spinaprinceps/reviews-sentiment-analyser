@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { getMeta, getRecommendations } from '../api';
 import { useApi } from '../hooks/useApi';
 import { label, pct } from '../format';
+import BookingForm from './BookingForm.jsx';
 
 const MAX_PRIORITIES = 3;
 
-export default function TravellerPage({ onOpenHotel }) {
+export default function TravellerPage({ traveller, onSignIn, onOpenHotel }) {
   // Cities and aspect names come from the API, never from a list typed in here.
   const meta = useApi(getMeta, []);
   const [city, setCity] = useState('');
@@ -84,14 +85,22 @@ export default function TravellerPage({ onOpenHotel }) {
       {ready && results.error && <p className="error">{results.error}</p>}
       {ready && !results.data && !results.error && <p className="muted hint">Loading…</p>}
       {ready && results.data && (
-        <Results data={results.data} loading={results.loading} onOpenHotel={onOpenHotel} />
+        <Results
+          data={results.data}
+          loading={results.loading}
+          traveller={traveller}
+          onSignIn={onSignIn}
+          onOpenHotel={onOpenHotel}
+        />
       )}
     </main>
   );
 }
 
-function Results({ data, loading, onOpenHotel }) {
+function Results({ data, loading, traveller, onSignIn, onOpenHotel }) {
   const { city, hotels } = data;
+  // The hotel whose booking form is open; only one at a time.
+  const [bookingFor, setBookingFor] = useState(null);
 
   if (hotels.length === 0) {
     return (
@@ -154,10 +163,25 @@ function Results({ data, loading, onOpenHotel }) {
               ) : (
                 <span />
               )}
-              <button className="link" onClick={() => onOpenHotel(hotel)}>
-                See full insights →
-              </button>
+              <span className="result-actions">
+                <button className="link" onClick={() => onOpenHotel(hotel)}>
+                  See full insights →
+                </button>
+                {traveller ? (
+                  <button className="primary" onClick={() => setBookingFor(hotel.id)}>
+                    Book this hotel
+                  </button>
+                ) : (
+                  <button className="primary" onClick={onSignIn}>
+                    Sign in to book
+                  </button>
+                )}
+              </span>
             </div>
+
+            {traveller && bookingFor === hotel.id && (
+              <BookingForm traveller={traveller} hotel={hotel} onClose={() => setBookingFor(null)} />
+            )}
           </li>
         ))}
       </ol>

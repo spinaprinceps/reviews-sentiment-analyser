@@ -179,6 +179,65 @@ button.link:hover { text-decoration: underline; }
 }
 .quotes li + li { margin-top: 2px; }
 
+/* Buttons and form fields used by booking, sign-in and reviews. */
+button.primary {
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  background: var(--series-1);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button.primary:hover:not(:disabled) { filter: brightness(1.1); }
+button.primary:disabled { opacity: 0.6; cursor: wait; }
+
+.traveller input,
+.traveller textarea,
+.traveller .review-form select,
+.inline-form input {
+  padding: 6px 8px;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.traveller label { display: grid; gap: 4px; }
+.success { color: var(--good); margin: 10px 0 0; }
+
+.result-actions { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+.inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--grid);
+}
+.form-error { flex-basis: 100%; margin: 0; }
+
+.topbar-user { margin-left: auto; }
+
+/* My trips */
+.trips-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.traveller > .card + .card { margin-top: 16px; }
+.sign-in { display: grid; gap: 12px; max-width: 360px; margin-top: 16px; }
+.notices { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+.notice { padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); }
+.notice p { margin: 0 0 4px; }
+.notice.unread { background: var(--selected); border-color: var(--series-1); }
+.notices-card { border-color: var(--critical); }
+.bookings { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+.bookings > li { padding: 8px 0; border-bottom: 1px solid var(--grid); }
+.booking-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.review-form { display: grid; gap: 10px; margin-top: 10px; max-width: 560px; }
+.review-form input[type='number'] { max-width: 100px; }
+.form-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; }
+
 /* Page layout: hotel list on the left, dashboard on the right. */
 .layout {
   display: grid;
@@ -436,4 +495,8 @@ main { padding: 24px; min-width: 0; }
   .delta { grid-column: 1 / -1; }
   .result-aspects li { grid-template-columns: 90px 1fr; }
   .result-aspects li .small { grid-column: 1 / -1; }
+  .result-actions { margin-left: 0; width: 100%; justify-content: space-between; }
+  .booking-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .topbar { overflow-x: auto; }
+  .topbar-user { display: none; }
 }

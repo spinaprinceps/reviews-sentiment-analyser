@@ -4,6 +4,7 @@ import { useApi } from '../hooks/useApi';
 import AspectScores from './AspectScores.jsx';
 import TrendChart from './TrendChart.jsx';
 import AlertList from './AlertList.jsx';
+import HotelNotices from './HotelNotices.jsx';
 
 export default function HotelDashboard({ hotelId }) {
   const aspects = useApi(() => getAspects(hotelId), [hotelId]);
@@ -38,6 +39,8 @@ export default function HotelDashboard({ hotelId }) {
         <h1>{hotel.name}</h1>
         <p className="muted">{hotel.address}</p>
       </header>
+
+      <HotelNotices hotelId={hotelId} />
 
       <div className="dashboard-grid">
         <AspectScores

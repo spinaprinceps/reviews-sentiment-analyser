@@ -5,6 +5,8 @@ const hotelsRoutes = require('./routes/hotels.routes');
 const errorHandler = require('./middleware/errorHandler');
 const metaRoutes = require('./routes/meta.routes');
 const recommendationsRoutes = require('./routes/recommendations.routes');
+const travellersRoutes = require('./routes/travellers.routes');
+const notificationsRoutes = require('./routes/notifications.routes');
 
 const app = express();
 
@@ -16,6 +18,8 @@ app.use('/api/health', healthRoutes);
 app.use('/api/hotels', hotelsRoutes);
 app.use('/api/meta', metaRoutes);
 app.use('/api/recommendations', recommendationsRoutes);
+app.use('/api/travellers', travellersRoutes);
+app.use('/api/notifications', notificationsRoutes);
 
 
 app.use((req, res) => res.status(404).json({ error: 'Not found' }));

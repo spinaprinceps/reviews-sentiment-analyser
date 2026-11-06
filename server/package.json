@@ -10,7 +10,10 @@
     "load": "node src/jobs/load.js",
     "extract": "node src/jobs/extract.js",
     "llm": "node --env-file=.env src/jobs/llm.js",
-    "trends": "node src/jobs/trends.js"
+    "trends": "node src/jobs/trends.js",
+    "migrate": "node src/jobs/migrate.js",
+    "notify": "node src/jobs/notify.js",
+    "worker": "node src/jobs/worker.js"
   },
   "keywords": [],
   "author": "",

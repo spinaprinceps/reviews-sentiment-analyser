@@ -10,11 +10,24 @@ const PRIOR_MENTIONS = 20;
 const LIMIT = 10;
 // Guest quotes shown per hotel and priority.
 const QUOTES_PER_ASPECT = 2;
+// "Recent" is counted back from the newest month with at least this many mentions
+// across all hotels. A few new reviews can't move it; real volume can.
+const MIN_MONTH_MENTIONS = 500;
 
 // The best hotels in a city for the given aspects, best first.
 async function recommendHotels(city, priorities) {
   const result = await pool.query(
-    `WITH latest AS (SELECT max(month) AS month FROM hotel_aspect_monthly),
+    `WITH latest AS (
+       SELECT coalesce(
+         (SELECT max(month)
+          FROM (SELECT month
+                FROM hotel_aspect_monthly
+                GROUP BY month
+                HAVING sum(positive_count + negative_count) >= $7::int) busy_months),
+         -- Too little data for any month to qualify (e.g. a --limit test load): use the newest.
+         (SELECT max(month) FROM hotel_aspect_monthly)
+       ) AS month
+     ),
      recent AS (
        SELECT m.hotel_id, m.aspect,
               sum(m.positive_count)::int AS positive,
@@ -57,7 +70,7 @@ async function recommendHotels(city, priorities) {
      HAVING count(*) = cardinality($2::text[])
      ORDER BY score DESC, h.name
      LIMIT $6::int`,
-    [city, priorities, RECENT_MONTHS, PRIOR_MENTIONS, ALERT_MONTHS, LIMIT]
+    [city, priorities, RECENT_MONTHS, PRIOR_MENTIONS, ALERT_MONTHS, LIMIT, MIN_MONTH_MENTIONS]
   );
   const hotels = result.rows;
   if (hotels.length === 0) return hotels;

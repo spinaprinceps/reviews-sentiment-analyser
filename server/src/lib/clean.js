@@ -119,6 +119,8 @@ function cleanRow(rawRow) {
 
 module.exports = {
   CITIES,
+  TRIP_TAGS,
+  TRAVELLER_TAGS,
   cleanRow,
   cleanText,
   contentHash,

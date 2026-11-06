@@ -7,5 +7,7 @@ router.get('/', hotelsController.list);
 router.get('/:id/aspects', hotelsController.aspects);
 router.get('/:id/trends', hotelsController.trends);
 router.get('/:id/alerts', hotelsController.alerts);
+router.post('/:id/reviews', hotelsController.createReview);
+router.get('/:id/notifications', hotelsController.notifications);
 
 module.exports = router;
